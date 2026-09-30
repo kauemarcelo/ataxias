@@ -73,8 +73,6 @@
   .btn-ghost:hover { background: var(--line); }
   .btn-dark { background: #0f172a; color: #fff; }
   .btn-dark:hover { background: #1e293b; }
-  .btn-brand { background: var(--brand); color: #fff; }
-  .btn-brand:hover { background: var(--brand-dark); }
   .btn-mail { background: #0369a1; color: #fff; }
   .btn-mail:hover { background: #075985; }
   .btn-whats { background: #16a34a; color: #fff; }
@@ -220,7 +218,6 @@
       <button type="button" class="btn-ghost" id="btnLimpar">Limpar campos</button>
       <div class="group">
         <button type="button" class="btn-dark" id="btnImprimir">Imprimir / salvar PDF</button>
-        <button type="button" class="btn-brand" id="btnCopiar">Copiar dados formatados</button>
         <button type="button" class="btn-mail" id="btnEmail">Enviar por e-mail</button>
         <button type="button" class="btn-whats" id="btnWhats">Enviar pelo WhatsApp</button>
       </div>
@@ -440,35 +437,8 @@ ${v('sintomas')}
 Data de início dos sintomas: ${v('inicioSintomas')}`;
   }
 
-  function copiarFallback(texto) {
-    const ta = document.createElement('textarea');
-    ta.value = texto;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    let ok = false;
-    try { ok = document.execCommand('copy'); } catch (e) {}
-    document.body.removeChild(ta);
-    return ok;
-  }
-
-  el('btnCopiar').addEventListener('click', async () => {
-    if (!validar()) { aviso('Corrija os campos destacados.', 'err'); return; }
-    const texto = montarTexto();
-    let ok = false;
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(texto);
-        ok = true;
-      }
-    } catch (e) {}
-    if (!ok) ok = copiarFallback(texto);
-    ok ? aviso('Dados copiados.', 'ok') : aviso('Não foi possível copiar. Tente novamente.', 'err');
-  });
-
   /* ---------- Envio por e-mail e WhatsApp com Modal ---------- */
-  const EMAIL_DESTINO = '';      // ex.: 'atendimento@clinica.com.br'
+  const EMAIL_DESTINO = '';    // ex.: 'atendimento@clinica.com.br'
 
   el('btnEmail').addEventListener('click', () => {
     if (!validar()) { aviso('Corrija os campos destacados.', 'err'); return; }
